@@ -133,7 +133,7 @@ const GalleryNFTs = () => {
         </div>
         <div className='mt-16'>
           <a className='btn btn-primary' href='/'>
-            GO BACK HOME
+            MINT MORE
           </a>
         </div>
       </div>

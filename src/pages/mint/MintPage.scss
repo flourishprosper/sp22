@@ -1,16 +1,17 @@
 .mint-page {
   @apply bg-cover bg-no-repeat min-h-screen bg-black;
-  background: url('/assets/images/background.png');
+  background: url('/assets/images/pedestal.png'),
+              url('/assets/images/background.png');
   background-size: cover;
   background-position: center;
 
   .sp-container {
     @apply w-full min-h-screen flex flex-col items-center;
-    background: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.92) 11.9%,
-      rgba(0, 0, 0, 0.3) 95.04%
-    );
+    // background: linear-gradient(
+    //   180deg,
+    //   rgba(0, 0, 0, 0.92) 11.9%,
+    //   rgba(0, 0, 0, 0.3) 95.04%
+    // );
   }
 
   .sp-logo {
@@ -31,7 +32,7 @@
     min-height: 48rem;
 
     .sp-left-content {
-      width: 31.25rem;
+      width: 30rem;
 
       @media (max-width: 1780px) {
         width: 25.4rem;
@@ -128,14 +129,14 @@
 
     .sp-nft-content {
       @apply relative flex flex-col justify-end;
-      width: 43.375rem;
+      width: 40.375rem;
 
       @media (max-width: 1780px) {
-        width: 38.85rem;
+        width: 50.85rem;
       }
 
       @media (max-width: 1536px) and (min-width: 768px) {
-        width: 31.62rem;
+        width: 50.62rem;
       }
 
       @media (max-width: 768px) {
@@ -168,7 +169,7 @@
 
       .link-icon {
         @apply w-20 absolute left-2/4;
-        top: 40%;
+        top: 50%;
         transform: translate(-50%, -50%);
         @media (max-width: 768px) {
           width: 50px;
@@ -185,7 +186,7 @@
     }
 
     .sp-right-content {
-      width: 31.25rem;
+      width: 30rem;
 
       @media (max-width: 1780px) {
         width: 25.4rem;

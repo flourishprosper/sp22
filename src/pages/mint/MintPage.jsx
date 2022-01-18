@@ -125,7 +125,7 @@ const MintPage = () => {
 
     if (minted === 0 && account) {
       setMinted(1);
-      setProgressValue(50);
+      setProgressValue(100);
       const price = parseInt(cost, 10) / 10 ** 18;
 
       mint(account, 1, {
@@ -273,11 +273,7 @@ const MintPage = () => {
                 alt='On-line'
               />
             )}
-            <img
-              className='mt-[-50px]'
-              src='./assets/images/pedestal.png'
-              alt='Pedestal'
-            />
+
           </div>
           <div className='sp-right-content'>
             {minted === 1 && progressValue === 100 && (
@@ -301,7 +297,7 @@ const MintPage = () => {
                     className='btn btn-primary'
                     onClick={() => navigate('/nfts')}
                   >
-                    MY WATCHES
+                    WATCH INFO
                   </button>
                   <button
                     className='btn btn-default'
