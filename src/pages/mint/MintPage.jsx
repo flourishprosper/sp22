@@ -125,7 +125,7 @@ const MintPage = () => {
 
     if (minted === 0 && account) {
       setMinted(1);
-      setProgressValue(100);
+      setProgressValue(45);
       const price = parseInt(cost, 10) / 10 ** 18;
 
       mint(account, 1, {
@@ -151,6 +151,7 @@ const MintPage = () => {
           <div className='sp-left-content'>
             <h2 className='master-text'>SP21 MTVRSMaster</h2>
             <h2 className='collection-text'> Collection</h2>
+            <p>Pre-sale. Whitelist Only. Public Sale 1/27</p>
             <div className='collection-details'>
               <div className='price'>
                 <svg
@@ -281,28 +282,21 @@ const MintPage = () => {
                 <h2 className='edition-text'>{tokenName}</h2>
                 <h4>{desc}</h4>
                 <div className='edition-link'>
-                  {`${process.env.REACT_APP_URL}?dna=${dna}`}
-                  <span className='flex' onClick={handleCopyClipboard}>
-                    <CopyIcon />
-                  </span>
-                  <a
-                    className='flex'
-                    href={`${process.env.REACT_APP_URL}?dna=${dna}`}
-                  >
-                    <LinkIcon />
-                  </a>
+                  DNA: {dna}
                 </div>
                 <div className='btn-group'>
                   <button
-                    className='btn btn-primary'
-                    onClick={() => navigate('/nfts')}
+                    className='btn btn-default'
+                    onClick={() => {
+                      window.open(`${process.env.REACT_APP_URL}?dna=${dna}`);
+                    }}
                   >
-                    WATCH INFO
+                    MY WATCH
                   </button>
                   <button
                     className='btn btn-default'
                     onClick={() => {
-                      window.location.href = process.env.REACT_APP_OPENSEA_URL;
+                      window.open(`https://testnets.opensea.io/assets/${process.env.REACT_APP_CONTRACT_ADDRESS}/${totalSupply}`);
                     }}
                   >
                     OPENSEA

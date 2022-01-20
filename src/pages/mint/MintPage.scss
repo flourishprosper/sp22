@@ -129,14 +129,14 @@
 
     .sp-nft-content {
       @apply relative flex flex-col justify-end;
-      width: 40.375rem;
+      width: 30.375rem;
 
       @media (max-width: 1780px) {
-        width: 50.85rem;
+        width: 30.85rem;
       }
 
       @media (max-width: 1536px) and (min-width: 768px) {
-        width: 50.62rem;
+        width: 30.62rem;
       }
 
       @media (max-width: 768px) {
@@ -178,9 +178,9 @@
 
       .item {
         @apply flex justify-center;
-
         img {
           @apply w-full;
+
         }
       }
     }
