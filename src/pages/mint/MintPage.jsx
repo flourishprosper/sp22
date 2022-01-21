@@ -270,7 +270,7 @@ const MintPage = () => {
             ) : (
               <img
                 className='link-icon'
-                src='./assets/images/on-line.png'
+                src='./assets/images/orb-ani.gif'
                 alt='On-line'
               />
             )}

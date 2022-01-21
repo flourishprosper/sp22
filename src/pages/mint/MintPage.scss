@@ -169,10 +169,11 @@
 
       .link-icon {
         @apply w-20 absolute left-2/4;
+        width: 450px;
         top: 50%;
         transform: translate(-50%, -50%);
         @media (max-width: 768px) {
-          width: 50px;
+          width: 250px;
         }
       }
 
