@@ -269,7 +269,7 @@ const MintPage = () => {
               </Carousel>
             ) : (
               <img
-                className='link-icon'
+                className='orb-ani'
                 src='./assets/images/orb-ani.gif'
                 alt='On-line'
               />
@@ -280,10 +280,11 @@ const MintPage = () => {
             {minted === 1 && progressValue === 100 && (
               <>
                 <h2 className='edition-text'>{tokenName}</h2>
-                <h4>{desc}</h4>
+                
                 <div className='edition-link'>
                   DNA: {dna}
                 </div>
+                <h4>{desc}</h4>
                 <div className='btn-group'>
                   <button
                     className='btn btn-default'

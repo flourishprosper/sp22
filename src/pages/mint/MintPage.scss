@@ -128,7 +128,7 @@
     }
 
     .sp-nft-content {
-      @apply relative flex flex-col justify-end;
+      @apply relative flex flex-col justify-center;
       width: 30.375rem;
 
       @media (max-width: 1780px) {
@@ -169,6 +169,15 @@
 
       .link-icon {
         @apply w-20 absolute left-2/4;
+        width: 150px;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        @media (max-width: 768px) {
+          width: 250px;
+        }
+      }
+      .orb-ani {
+        @apply w-20 absolute left-2/4;
         width: 450px;
         top: 50%;
         transform: translate(-50%, -50%);
@@ -179,14 +188,18 @@
 
       .item {
         @apply flex justify-center;
+        display: flex;
+        justify-content: center;
         img {
           @apply w-full;
+          width: 450px;
 
         }
       }
     }
 
     .sp-right-content {
+      @apply relative flex flex-col justify-center;
       width: 30rem;
 
       @media (max-width: 1780px) {
@@ -266,7 +279,7 @@
 }
 
 .sp-progress-bar {
-  @apply absolute h-full top-0 right-0;
+  @apply absolute h-full top-0 left-0;
   background: #5f6063;
   transition: width 0.5s ease-in-out;
   z-index: -1;
