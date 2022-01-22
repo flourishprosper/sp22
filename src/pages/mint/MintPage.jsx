@@ -151,7 +151,8 @@ const MintPage = () => {
           <div className='sp-left-content'>
             <h2 className='master-text'>SP21 MTVRSMaster</h2>
             <h2 className='collection-text'> Collection</h2>
-            <p>Pre-sale. Whitelist Only. Public Sale 1/27</p>
+            <h3>Pre-sale. Whitelist Only. </h3>
+            <h2>Public Sale TBD</h2>
             <div className='collection-details'>
               <div className='price'>
                 <svg
@@ -200,12 +201,12 @@ const MintPage = () => {
                   </h3>
                   <p>Total Watches</p>
                 </div>
-                <div className='column'>
+                {/* <div className='column'>
                   <h3>
                     <CountUp end={2000} duration={1} separator=',' />
                   </h3>
                   <p>Batch Supplies</p>
-                </div>
+                </div> */}
                 <div className='column'>
                   <h3>
                     <CountUp
