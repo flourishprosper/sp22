@@ -190,7 +190,7 @@ const MintPage = () => {
                 + Gas Fees
               </div>
 
-              <div className='grid grid-cols-3 gap-2 md:gap-3 mt-[34px]'>
+              <div className='grid grid-cols-2 gap-2 md:gap-3 mt-[34px]'>
                 <div className='column'>
                   <h3>
                     <CountUp
