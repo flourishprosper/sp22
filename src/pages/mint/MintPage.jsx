@@ -166,8 +166,7 @@ const MintPage = () => {
                     <div className='sp-left-content'>
                         <h2 className='master-text'>SP21 MTVRSMaster</h2>
                         <h2 className='collection-text'> Collection</h2>
-                        <h3>Pre-sale. Whitelist Only. </h3>
-                        <h2>Public Sale TBD</h2>
+                        <h3>Pre-sale now </h3>
                         <div className='collection-details'>
                             <div className='price'>
                                 <svg
