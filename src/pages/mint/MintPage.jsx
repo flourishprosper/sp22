@@ -118,7 +118,7 @@ const MintPage = () => {
     };
 
     const handleMint = async () => {
-        if (!termsAndConditionsChecked){
+        if (account && !termsAndConditionsChecked){
             return;
         }
         if (window?.ethereum) {
@@ -206,14 +206,17 @@ const MintPage = () => {
 
                             <div className='grid grid-cols-2 gap-2 md:gap-3 mt-[34px]'>
                                 <div className='column'>
+                                        {account
+                                    ?
                                     <h3>
-                                        <CountUp
-                                            end={account ? maxSupply : 0}
-                                            duration={1}
-                                            separator=','
-                                        />
-                                    </h3>
-                                    <p>Total Watches</p>
+                                    <CountUp
+                                        end={account ? maxSupply : 0}
+                                        duration={1}
+                                        separator=','
+                                    /><p>Total Watches</p></h3>
+                                    : <p>** Please connect your Ethereum wallet first **</p>
+                                    }
+                                    
                                 </div>
                                 {/* <div className='column'>
                   <h3>
@@ -249,9 +252,9 @@ const MintPage = () => {
                                     className='sp-progress-bar'
                                     style={{ width: `${progressValue}%` }}
                                 ></div>
-                                {minted === 0 && termsAndConditionsChecked
+                                {minted === 0 && termsAndConditionsChecked || !account
                                     ? account
-                                        ? 'MINT'
+                                        ? 'MINT' 
                                         : 'CONNECT'
                                     : progressValue === 100 && termsAndConditionsChecked
                                         ? 'MINTED'
