@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { utils } from 'ethers';
 import { useEthers, shortenAddress, Mainnet, Rinkeby } from '@usedapp/core';
-import { useMint, useTotalSupply, useMaxSupply, useCost, useWalletOfOwner,} from '../../hooks';
+import { useMint, useTotalSupply, useMaxSupply, useCost, useWalletOfOwner, } from '../../hooks';
 import { ReactComponent as ConnectIcon } from '../../assets/icons/icon-online.svg';
 import { ReactComponent as NotConnectIcon } from '../../assets/icons/icon-offline.svg';
 import { ReactComponent as LinkIcon } from '../../assets/icons/icon-link.svg';
@@ -48,6 +48,18 @@ const MintPage = () => {
   const [desc, setDesc] = useState('');
   const [ani, setAni] = useState('');
   // const tokenURI = useTokenURI(17);
+
+  const [termsAndConditionsChecked, setChecked] = React.useState(false);
+
+  const handleChange = () => {
+    setChecked(!termsAndConditionsChecked);
+    if (termsAndConditionsChecked) {
+      var button = document.getElementById("terms_and_conditions");
+    }
+    else {
+      document.getElementById("terms_and_conditions").disabled = true;
+    }
+  };
 
   useEffect(() => {
     setMinted(0);
@@ -90,9 +102,9 @@ const MintPage = () => {
     axios
       .get(
         '' +
-          process.env.REACT_APP_ALLOW_CORS_URL +
-          process.env.REACT_APP_METADATA_URL +
-          `${totalSupply}.json`
+        process.env.REACT_APP_ALLOW_CORS_URL +
+        process.env.REACT_APP_METADATA_URL +
+        `${totalSupply}.json`
       )
       .then((response) => {
         setDNA(response.data.dna);
@@ -106,6 +118,9 @@ const MintPage = () => {
   };
 
   const handleMint = async () => {
+    if (account && !termsAndConditionsChecked) {
+      return;
+    }
     if (window?.ethereum) {
       const chainId = await window?.ethereum?.request({
         method: 'eth_chainId',
@@ -151,8 +166,7 @@ const MintPage = () => {
           <div className='sp-left-content'>
             <h2 className='master-text'>SP21 MTVRSMaster</h2>
             <h2 className='collection-text'> Collection</h2>
-            <h3>Pre-sale. Whitelist Only. </h3>
-            <h2>Public Sale TBD</h2>
+            <h3>Pre-sale now </h3>
             <div className='collection-details'>
               <div className='price'>
                 <svg
@@ -183,8 +197,8 @@ const MintPage = () => {
                 <span>
                   {account
                     ? `{${parseFloat(
-                        (ethPrice * parseInt(cost, 10)) / 10 ** 18
-                      )}$}`
+                      (ethPrice * parseInt(cost, 10)) / 10 ** 18
+                    )}$}`
                     : '(0$)'}
                 </span>{' '}
                 + Gas Fees
@@ -192,14 +206,17 @@ const MintPage = () => {
 
               <div className='grid grid-cols-2 gap-2 md:gap-3 mt-[34px]'>
                 <div className='column'>
-                  <h3>
-                    <CountUp
-                      end={account ? maxSupply : 0}
-                      duration={1}
-                      separator=','
-                    />
-                  </h3>
-                  <p>Total Watches</p>
+                  {account
+                    ?
+                    <h3>
+                      <CountUp
+                        end={account ? maxSupply : 0}
+                        duration={1}
+                        separator=','
+                      /><p>Total Watches</p></h3>
+                    : <p>** Please connect your Ethereum wallet first **</p>
+                  }
+
                 </div>
                 {/* <div className='column'>
                   <h3>
@@ -230,18 +247,30 @@ const MintPage = () => {
                   </>
                 )}
               </div>
-              <div className='btn btn-primary' onClick={handleMint}>
+              <div id="terms_and_conditions" className='btn btn-primary' onClick={handleMint}>
                 <div
                   className='sp-progress-bar'
                   style={{ width: `${progressValue}%` }}
                 ></div>
-                {minted === 0
+                {minted === 0 && termsAndConditionsChecked || !account
                   ? account
                     ? 'MINT'
                     : 'CONNECT'
-                  : progressValue === 100
-                  ? 'MINTED'
-                  : 'MINTING...'}
+                  : progressValue === 100 && termsAndConditionsChecked
+                    ? 'MINTED'
+                    : termsAndConditionsChecked ? 'MINTING...'
+                      : 'Please accept terms and conditions'
+                }
+              </div>
+              <div>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={termsAndConditionsChecked}
+                    onChange={handleChange}
+                  />
+                  I accept the <a href='https://www.spatial-port.com/terms-conditions' target='_blank'>Terms & Conditions</a> and <a href='https://www.spatial-port.com/privacy-policy' target='_blank'>Privacy Policy</a>.
+                </label>
               </div>
             </div>
           </div>
@@ -281,7 +310,7 @@ const MintPage = () => {
             {minted === 1 && progressValue === 100 && (
               <>
                 <h2 className='edition-text'>{tokenName}</h2>
-                
+
                 <div className='edition-link'>
                   DNA: {dna}
                 </div>
