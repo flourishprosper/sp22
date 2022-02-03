@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import Carousel from 'react-multi-carousel';
 import CountUp from 'react-countup';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 import { utils } from 'ethers';
-import { useEthers, shortenAddress, Mainnet, Rinkeby } from '@usedapp/core';
+import axios from 'axios';
+import { useEthers, shortenAddress } from '@usedapp/core';
+import { Mainnet, DAppProvider } from '@usedapp/core';
+import Web3Modal from 'web3modal';
+import WalletConnectProvider from '@walletconnect/web3-provider';
 import {
   useMint,
   useTotalSupply,
@@ -14,16 +16,8 @@ import {
   useCost,
   useWalletOfOwner,
 } from '../../hooks';
-import { SPContext } from '../../utils/context';
-import {
-  getCurrentWalletAddress,
-  showWeb3WalletModal,
-  disconnectWallet,
-} from '../../utils';
 import { ReactComponent as ConnectIcon } from '../../assets/icons/icon-online.svg';
 import { ReactComponent as NotConnectIcon } from '../../assets/icons/icon-offline.svg';
-import { ReactComponent as LinkIcon } from '../../assets/icons/icon-link.svg';
-import { ReactComponent as CopyIcon } from '../../assets/icons/icon-copy.svg';
 import 'react-multi-carousel/lib/styles.css';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -42,13 +36,11 @@ const responsive = {
 };
 
 const MintPage = () => {
-  const spContext = useContext(SPContext);
-  const navigate = useNavigate();
-  // const { account, activateBrowserWallet } = useEthers();
+  const { account, error, activate, chainId, deactivate } = useEthers();
   const cost = useCost();
   const totalSupply = useTotalSupply();
   const maxSupply = useMaxSupply();
-  const walletOfOwner = useWalletOfOwner(spContext.addressState);
+  const walletOfOwner = useWalletOfOwner(account);
   const { state: mintState, send: mint } = useMint();
 
   const [minted, setMinted] = useState(0);
@@ -60,6 +52,8 @@ const MintPage = () => {
   const [imageURI, setImageURI] = useState('');
   const [desc, setDesc] = useState('');
   const [ani, setAni] = useState('');
+  const [activateError, setActivateError] = useState('');
+
   // const tokenURI = useTokenURI(17);
 
   const [termsAndConditionsChecked, setChecked] = React.useState(false);
@@ -76,7 +70,19 @@ const MintPage = () => {
   useEffect(() => {
     setMinted(0);
     setProgressValue(0);
+
+    deactivate();
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      setActivateError(error.message);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    activateError && toast.error(activateError);
+  }, [activateError]);
 
   useEffect(() => {
     fetchCurrencyData();
@@ -133,21 +139,42 @@ const MintPage = () => {
       return;
     }
 
-    if (!spContext.addressState) {
-      showWeb3WalletModal().then(async () => {
-        const acc = await getCurrentWalletAddress();
-        spContext.handleConnect(acc);
+    const providerOptions = {
+      injected: {
+        display: {
+          name: 'Metamask',
+          description: 'Connect with the provider in your Browser',
+        },
+        package: null,
+      },
+      walletconnect: {
+        package: WalletConnectProvider,
+        options: {
+          bridge: 'https://bridge.walletconnect.org',
+          infuraId: process.env.REACT_APP_INFURA_ID,
+        },
+      },
+    };
 
-        if (!totalSupply) window.location.reload();
+    if (!account) {
+      const web3Modal = new Web3Modal({
+        providerOptions,
       });
+      const provider = await web3Modal.connect();
+      await activate(provider);
     }
 
-    if (minted === 0 && spContext.addressState) {
+    if (chainId !== Mainnet.chainId) {
+      toast.error('Invalid Network Connect.');
+      return;
+    }
+
+    if (minted === 0 && account) {
       setMinted(1);
       setProgressValue(45);
       const price = parseInt(cost, 10) / 10 ** 18;
 
-      mint(spContext.addressState, 1, {
+      mint(account, 1, {
         value: utils.parseEther(price.toString()),
       });
     }
@@ -198,9 +225,9 @@ const MintPage = () => {
                     fill='#9D9D9D'
                   />
                 </svg>
-                {spContext.addressState ? parseInt(cost, 10) / 10 ** 18 : 0} ETH{' '}
+                {account ? parseInt(cost, 10) / 10 ** 18 : 0} ETH{' '}
                 <span>
-                  {spContext.addressState
+                  {account
                     ? `{${parseFloat(
                         (ethPrice * parseInt(cost, 10)) / 10 ** 18
                       )}$}`
@@ -213,7 +240,7 @@ const MintPage = () => {
                 <div className='column'>
                   <h3>
                     <CountUp
-                      end={spContext.addressState ? maxSupply : 0}
+                      end={account ? maxSupply : 0}
                       duration={1}
                       separator=','
                     />
@@ -229,7 +256,7 @@ const MintPage = () => {
                 <div className='column'>
                   <h3>
                     <CountUp
-                      end={spContext.addressState ? totalSupply : 0}
+                      end={account ? totalSupply : 0}
                       duration={1}
                       separator=','
                     />
@@ -238,10 +265,9 @@ const MintPage = () => {
                 </div>
               </div>
               <div className='flex items-center my-[27px] text-[10px] md:text-xs gap-2 md:gap-3'>
-                {spContext.addressState ? (
+                {account ? (
                   <>
-                    <ConnectIcon />{' '}
-                    {`Connected to ${shortenAddress(spContext.addressState)}`}
+                    <ConnectIcon /> {`Connected to ${shortenAddress(account)}`}
                   </>
                 ) : (
                   <>
@@ -260,7 +286,7 @@ const MintPage = () => {
                   style={{ width: `${progressValue}%` }}
                 ></div>
                 {minted === 0 && termsAndConditionsChecked
-                  ? spContext.addressState
+                  ? account
                     ? 'MINT'
                     : 'CONNECT'
                   : progressValue === 100 && termsAndConditionsChecked

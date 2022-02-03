@@ -7,7 +7,7 @@
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
-    "@usedapp/core": "^0.7.3",
+    "@usedapp/core": "0.10.0",
     "@walletconnect/web3-provider": "^1.7.1",
     "axios": "^0.24.0",
     "ethers": "^5.5.3",
@@ -21,7 +21,6 @@
     "react-scripts": "4.0.3",
     "react-toastify": "^8.1.0",
     "web-vitals": "^2.1.2",
-    "web3": "^1.7.0",
     "web3modal": "^1.9.5"
   },
   "scripts": {
@@ -29,7 +28,7 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "deploy": "npm run build"
+    "deploy": "npm run build && aws s3 sync build s3://mint.spatial-port.io --delete"
   },
   "eslintConfig": {
     "extends": [
